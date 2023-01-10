@@ -15,9 +15,11 @@ pip3 install .
 
 ## 使用方法
 
+本工具支持华为昇腾设备上离线om模型推理，支持310， 310P(710)等设备，om模型可由ATC工具转换onnx、pb等第三方框架模型而来
+
 #### 实际应用推理
 
-**静态shape或分档**(分档只支持--dynamic_dims参数转出的模型)推理请查看infer_sample中的infer_static_dydims函数；**动态shape**推理请查看infer_sample中的infer_dynamic函数。
+**静态shape或分档**(分档只支持--dynamic_dims参数转出的模型)推理请查看infer_sample中的infer_static_dydims函数；**动态shape**推理请查看infer_sample中的infer_dynamic函数；串行多个模型推理请查看infer_sample中的infer_two_models函数
 
 **循环推理场景**：
 
