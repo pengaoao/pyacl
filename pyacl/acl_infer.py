@@ -470,8 +470,7 @@ class AclNet(object):
 
     def _get_output_shape(self):
         output_shape = []
-        num = acl.mdl.get_dataset_num_buffers(self.load_output_dataset)
-        for output_index in range(num):
+        for output_index in range(self.output_size):
             if self.dynamic:
                 outpu_desc = acl.mdl.get_dataset_tensor_desc(
                     self.load_output_dataset, output_index)
@@ -574,7 +573,7 @@ class AclNet(object):
 
     def get_result(self, output_data, data, output_shape):
         dataset = []
-        for i in range(len(output_data)):
+        for i in range(self.output_size):
             # fix dynamic batch size
             if i in self.out_idx:
                 data_type = self.model_output_data_type[i]
@@ -591,7 +590,7 @@ class AclNet(object):
 
     def get_result_end_step(self, output_data, data, output_shape):
         dataset = []
-        for i in range(len(output_data)):
+        for i in range(self.output_size):
             # fix dynamic batch size
             data_type = self.model_output_data_type[i]
             data_len = functools.reduce(lambda x, y: x * y, output_shape[i])

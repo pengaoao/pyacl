@@ -38,7 +38,7 @@ for i in range(max_iter):
 #后续out继续后处理
 ```
 
-我们引入参数，将循环推理中间过程中H2D和D2H的次数减少，来减少端到端的推理时间，out_to_in为输出输入对应关系，out_idx为每次迭代都输出用于判断跳出循环的输出的索引，若不存在判断条件，该参数可不写，pin_input表示每次迭代输入都不变的输入的索引，若不存在，可不写，对应的优化代码为：
+我们引入参数，对于输出直接传给下一次迭代输入以及第一次之后输入不变的输入，我们将保存在device中，将循环推理中间过程中H2D和D2H的次数减少，来减少端到端的推理时间，out_to_in为输出输入对应关系，out_idx为每次迭代都输出用于判断跳出循环的输出的索引，若不存在判断条件，该参数可不写，pin_input表示每次迭代输入都不变的输入的索引，若不存在，可不写，对应的优化代码为：
 
 ```
 net = AclNet(model_path="xx.om", device_id = 0, out_to_in={1:0, 2:1}, out_idx=[0], pin_input=[2])
@@ -51,14 +51,14 @@ for i in range(max_iter-1):
         	finish_flag = True
             break
     else:
-    	out, exe_t = net([out[0], out[1], i2, fisrt_step=True, end_step=False)
+    	out, exe_t = net([out[0], out[1], i2, fisrt_step=False, end_step=False)
         if out[0].shape[0]==100:
         	finish_flag = True
             break
 if finish_flag:
     out, exe_t = net.get_final_result()
 else:
-	out, exe_t = net([out[0], out[1], i2], fisrt_step=True, end_step=True)
+	out, exe_t = net([out[0], out[1], i2], fisrt_step=False, end_step=True)
 #后续out继续后处理    
 ```
 
